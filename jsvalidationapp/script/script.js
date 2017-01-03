@@ -1,128 +1,157 @@
-// ДЗ 2: Создать приложение для ВКонтакте, которое загружает список ваших
-// друзей и выводит их на страницу в следующем формате:
-// Фото, ФИО, Возраст, Дата рождения.
-// Друзья должны быть отсортированы по дате рождения в порядке убывания.
-// То есть на самом верху списка расположен друг с ближайший датой рождения.
-// Использование шаблонизатора приветствуется.
-// =============================================================================
+'use strict';
 
+// Описание скрипта ============================================================
+// Скрипт для проверки вводимых значений в полях форм
+//
+// структура HTML формы ========================================================
+// <div class="form-group">
+//     <label class="control-label">...</label>
+//     <input type="email" class="form-control" placeholder="...">
+//     <span class="help-block"></span>
+// </div>
+// только в таком виде навешивание стандартных bootstrap классов для валидации
+// будет подкрашивать элементы формы
+// структура HTML формы ========================================================
+//
+// Установочные дата-атрибуты в шаблонах HTML
+//
+// Если форму нужно валидировать, на формие ставим дата атрибут: ===============
+// data-js-validation="true"
+// в случае если нужно быстро отключить валидацию на форме, то можно выставлять
+// значение атрибута равное false
 // =============================================================================
-// VK AppID = 5757533
+//
+// Если поле обязательно для заполнения: =======================================
+// То указываем дата атрибут
+// data-validation-require="true"
+// в случае если нужно быстро отключить проверку на обязательное поле, то ставим
+// значение атрибута равное false
 // =============================================================================
+//
+// Шаблоны по которым можно валидиролвать: =====================================
+// data-validation-templ=
+// указываем различные шаблоны, которые берем из настроечного объекта
+// @Param validators {object} объект в котором шаблоны со строками
+// в виде регулярных выражений
+//
+// data-validation-custom=""
+// в значении можно указывать кастомную строку в виде регулярки
+// =============================================================================
+//
+// Описание скрипта ============================================================
 
-// =============================================================================
-// Установка HTTP-сервера:
-// 1) npm install http-server -g
-// Запуск HTTP-сервера:
-// 2) http-server hm2 -p 7777 -a 127.0.0.1
-// 3) http://localhost:7777/
-// =============================================================================
 
-let vkAppId = 5757533;
-let headerUserFriendsVK = document.getElementById('headerUserFriendsVK');
-let listOfDownloadedFriends = document.getElementById('listOfDownloadedFriends');
-let allRenderedFriends = document.getElementById('allRenderedFriends');
-let VK_ACCESS_FRIENDS = 2;
+let form1 = document.getElementById('form1');
+let form2 = document.getElementById('form2');
+let form1SubmitBtn = document.getElementById('form1SubmitBtn');
+let form2SubmitBtn = document.getElementById('form2SubmitBtn');
+
+// установочные переменые ======================================================
+let validators = {
+    phone : {
+        regExpr: '/^((8|\+7)[\- ]?)?(\(?\d{3}\)?[\- ]?)?[\d\- ]{7,10}$/',
+        errorMsg: 'В поле нужно вводить номер телефона, в формате: +7(XXX)XXX-XXXX'
+    },
+    email : {
+        regExpr: '/.+@.+\..+/i',
+        errorMsg: 'В поле нужно вводить email, в формате: someaddress@domain.xxx'
+    }
+};
+// установочные переменые ======================================================
 
 // вспомогательные функции======================================================
-// функция сравнения возраста
-function compareAge(personA, personB) {
-    let friendA = new Date(personA.bdate.replace(/(\d+)\.(\d+)\.(\d+)/, '$2/$1/$3'));
-    let friendB = new Date(personB.bdate.replace(/(\d+)\.(\d+)\.(\d+)/, '$2/$1/$3'));
-    friendA = Date.parse(friendA);
-    friendB = Date.parse(friendB);
-    return friendB - friendA;       // здесь можно поменять порядок сортировки, поменяв слагаемые
-} // compareAge
+// Функция сравнивающая является ли поле обязательным для заполнения
+/**
+ * Функция проверки заполнено ли поле
+ * @param  {DOM ELEMENT} inputDOM   проверяемый инпут
+ * @return {boolean}                если поле пустое то возвращается false
+ *                                  иначе true
+ */
+function checkInputForRequire( inputDOM ) {
+    if ( !inputDOM.value ) {
+        return false;
+    }
+    return true;
+}; // checkInputForRequire
+
+// Функция сравнивающая данные в поле с предустановленной регуляркой
+function checkInputTemplRegular( validatorStr, inputDOM ) {
+    console.log('Валидирую строку = ', validators[validatorStr]);
+    return;
+}; // checkInputTemplRegular
+
+// функция для вывода сообщения об ошибке require, а так же о выделении инпута красным
+function requireValidateStatusInDOM( isRequireInput, inputDOM ) {
+    let parentDOM = inputDOM.parentElement;
+    let nextDOM = inputDOM.nextElementSibling;
+    if ( isRequireInput === false ) {
+        parentDOM.classList.add('has-error');
+        nextDOM.innerHTML = 'Поле является обязательным для заполнения';
+    } else {
+        parentDOM.classList.remove('has-error');
+        nextDOM.innerHTML = '';
+    }
+    return;
+}; //requireErrValidateStatusInDOM
 // вспомогательные функции======================================================
 
+// Обработчики событий =========================================================
+// Вадидация формы
+function handleFormValidate(e, form) {
+    e.preventDefault();
+    let checkFormStatus = false;
+    let isNeedFormValidate = form.getAttribute('data-js-validation');
+    if ( isNeedFormValidate === 'true' ) {
+        let allFormInputs = undefined;
+        allFormInputs = form.getElementsByTagName('input');
 
-new Promise(function(resolve) {
-        if (document.readyState === 'complete') {
-            resolve();
+        if ( allFormInputs.length !== 0 ) {
+            // проверка на ОБЯЗАТЕЛЬНОСТЬ полей
+            for (let i=0;i<allFormInputs.length;i++) {
+                let isRequire = allFormInputs[i].getAttribute('data-validation-require');
+                if ( isRequire === 'true' ) {
+                    let checkStatus = checkInputForRequire( allFormInputs[i] );
+                    checkFormStatus = checkStatus;
+                    requireValidateStatusInDOM( checkStatus, allFormInputs[i] );
+                }
+            }  // окончание проверки на ОБЯЗАТЕЛЬНОСТЬ полей
+
+            // проверка полей на соответсвие вводимых значений
+            if ( checkFormStatus ) {
+                for (let i=0;i<allFormInputs.length;i++) {
+                    // console.log( 'allFormInputs['+i+']', allFormInputs[i] );
+                    let validator = allFormInputs[i].getAttribute('data-validation-templ');
+                    let customValidator = allFormInputs[i].getAttribute('data-validation-custom');
+
+                    if ( validator ) {
+                        checkInputTemplRegular( validator, allFormInputs[i] )
+                    } else if ( customValidator ) {
+                        // вызывать функцию для проверки кастомной регулярки
+                    }
+
+                }
+            } // окончание проверки полей на соответсвие вводимых значений
+
         } else {
-            window.onload = resolve;
+            return;
         }
-    })
-    // запрос авторизации в ВК
-    .then(function() {
-        return new Promise(function(resolve, reject) {
-            VK.init({
-                apiId: vkAppId
-            });
+    } else {
+        // TODO здесь отдавать в BACK-END
+    }
 
-            VK.Auth.login(function(response) {
-                if (response.session) {
-                    resolve(response);
-                } else {
-                    reject(new Error('Не удалось авторизоваться'));
-                }
-            }, VK_ACCESS_FRIENDS);
-        });
-    })
-    // получение полного имени пользователя
-    .then(function() {
-        return new Promise(function(resolve, reject) {
-            VK.api('users.get', {'name_case': 'gen'}, function(response) {
-                if (response.error) {
-                    reject(new Error(response.error.error_msg));
-                } else {
-                    headerUserFriendsVK.textContent = `Друзья ${response.response[0].first_name} ${response.response[0].last_name}`;
-                    resolve();
-                }
-            });
-        })
-    })
-    // получение id всех друзей пользователя
-    .then(function() {
-        return new Promise(function(resolve, reject) {
-            VK.api('friends.get', {v: '5.8'}, function(serverAnswer) {
-                if (serverAnswer.error) {
-                    reject(new Error(serverAnswer.error.error_msg));
-                } else {
-                    resolve(serverAnswer);
-                }
-            });
-        });
-    })
-    // получение данных всех ранее полученных друзей, обработка дат рождения, вывод в DOM
-    .then( function(serverAnswer) {
-        return new Promise(
-            function(resolve, reject) {
-                VK.api(
-                    'users.get',
-                    {
-                        v: '5.8',
-                        user_ids: serverAnswer.response.items,
-                        fields: 'bdate,photo_50,friend_status'
-                    },
-                    function(serverAnswer) {
-                        if (serverAnswer.error) {
-                            reject(new Error(serverAnswer.error.error_msg));
-                        } else {
-                            console.log('serverAnswer.response = ', serverAnswer.response);
-                            // в промежуточный массив брать только тех кто указал дату рождения полностью
-                            let tempArrOfFriendsObj = [];
-                            for (let i = 0; i < serverAnswer.response.length; i++) {
-                                if ( serverAnswer.response[i].bdate && typeof serverAnswer.response[i].bdate !== 'undefined' ) {
-                                    if (serverAnswer.response[i].bdate.match(/\.\d{4}/i)) {
-                                        let tempLength = tempArrOfFriendsObj.length;
-                                        tempArrOfFriendsObj[tempLength] = serverAnswer.response[i];
-                                    }
-                                }
-                            }
-                            // вызов функции сортировки по возрасту
-                            tempArrOfFriendsObj.sort(compareAge);
-                            // вывод данных о друзьях в DOM
-                            let source = allRenderedFriends.innerHTML;
-                            let templateFn = Handlebars.compile(source);
-                            let template = templateFn({ friendslist: tempArrOfFriendsObj });
-                            listOfDownloadedFriends.innerHTML = template;
-                            resolve();
-                        }
-                });
-            }
-        );
-    })
-    .catch(function(e) {
-        alert(`Ошибка: ${e.message}`);
-    });
+
+} // handleFormValidate
+// Обработчики событий =========================================================
+
+
+
+
+
+
+
+
+// события на DOM элементах ====================================================
+// событие клик на кнопке "крестик"(перемещение справа-на-лево) в левой и правых стронах
+form1SubmitBtn.addEventListener('click', (e) => { handleFormValidate(e, form1); } );
+form2SubmitBtn.addEventListener('click', (e) => { handleFormValidate(e, form2); } );
+// события на DOM элементах ====================================================
