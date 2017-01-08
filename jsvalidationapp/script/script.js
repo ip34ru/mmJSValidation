@@ -40,6 +40,8 @@
 //
 // Описание скрипта ============================================================
 
+// TODO вынести в отдельную функцию код добавления(удаления) сообщения
+// при валидации полей формы
 
 let form1 = document.getElementById('form1');
 let form2 = document.getElementById('form2');
@@ -49,11 +51,13 @@ let form2SubmitBtn = document.getElementById('form2SubmitBtn');
 // установочные переменые ======================================================
 let validators = {
     phone : {
-        regExpr: '/^((8|\+7)[\- ]?)?(\(?\d{3}\)?[\- ]?)?[\d\- ]{7,10}$/',
+        regExprPattern: '^((8|\\+7)[\\- ]?)?(\\(?\\d{3}\\)?[\\- ]?)?[\\d\\- ]{7,10}$',
+        regExprFlags: '',
         errorMsg: 'В поле нужно вводить номер телефона, в формате: +7(XXX)XXX-XXXX'
     },
     email : {
-        regExpr: '/.+@.+\..+/i',
+        regExprPattern: '.+@.+\\..+',
+        regExprFlags: 'i',
         errorMsg: 'В поле нужно вводить email, в формате: someaddress@domain.xxx'
     }
 };
@@ -76,11 +80,26 @@ function checkInputForRequire( inputDOM ) {
 
 // Функция сравнивающая данные в поле с предустановленной регуляркой
 function checkInputTemplRegular( validatorStr, inputDOM ) {
-    console.log('Валидирую строку = ', validators[validatorStr]);
+    let validObj = validators[validatorStr];
+    let string = inputDOM.value;
+    let expression;
+    if ( validObj.regExprFlags === '' ) {
+        expression = new RegExp(validObj.regExprPattern);
+    } else {
+        expression = new RegExp(validObj.regExprPattern, validObj.regExprFlags);
+    }
+
+    // TODO на основе матча и теста написать проверку.
+    // написать доку по функции и решить, что возвращать из функции
+    console.log('Результат валидации', string.match(expression));
+    console.log('Результат валидации2', expression.test(string));
+
+
     return;
 }; // checkInputTemplRegular
 
 // функция для вывода сообщения об ошибке require, а так же о выделении инпута красным
+// TODO сделать более универсальную функцию
 function requireValidateStatusInDOM( isRequireInput, inputDOM ) {
     let parentDOM = inputDOM.parentElement;
     let nextDOM = inputDOM.nextElementSibling;
