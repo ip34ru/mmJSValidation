@@ -50,6 +50,12 @@ let form2SubmitBtn = document.getElementById('form2SubmitBtn');
 
 // установочные переменые ======================================================
 let validators = {
+    clean : {
+        errorMsg: ''
+    },
+    requireField : {
+        errorMsg: 'Поле является обязательным для заполнения'
+    },
     phone : {
         regExprPattern: '^((8|\\+7)[\\- ]?)?(\\(?\\d{3}\\)?[\\- ]?)?[\\d\\- ]{7,10}$',
         regExprFlags: '',
@@ -66,11 +72,11 @@ let validators = {
 // вспомогательные функции======================================================
 // Функция сравнивающая является ли поле обязательным для заполнения
 /**
- * Функция проверки заполнено ли поле
- * @param  {DOM ELEMENT} inputDOM   проверяемый инпут
- * @return {boolean}                если поле пустое то возвращается false
- *                                  иначе true
- */
+* Функция проверки заполнено ли поле
+* @param  {DOM ELEMENT} inputDOM   проверяемый инпут
+* @return {boolean}                если поле пустое то возвращается false
+*                                  иначе true
+*/
 function checkInputForRequire( inputDOM ) {
     if ( !inputDOM.value ) {
         return false;
@@ -79,36 +85,47 @@ function checkInputForRequire( inputDOM ) {
 }; // checkInputForRequire
 
 // Функция сравнивающая данные в поле с предустановленной регуляркой
+/**
+* [checkInputTemplRegular проверка на соответсвие данных введенных в поле
+* на соответсвие регулярному выражению
+* @param  {string} validatorStr      тип валидируемого шаблона, указанный для поля (пример: email, phone и т.д.)
+* @param  {DOM Element} inputDOM     DOM элемент, input из валидируемой формы
+* @return {boolean}                  если строка в поле совпадает с регуляркой, то true
+*                                    иначе false
+*/
 function checkInputTemplRegular( validatorStr, inputDOM ) {
     let validObj = validators[validatorStr];
     let string = inputDOM.value;
     let expression;
+
+    // построить регулярку в зависимости о наличия флагов
     if ( validObj.regExprFlags === '' ) {
         expression = new RegExp(validObj.regExprPattern);
     } else {
         expression = new RegExp(validObj.regExprPattern, validObj.regExprFlags);
     }
 
-    // TODO на основе матча и теста написать проверку.
-    // написать доку по функции и решить, что возвращать из функции
-    console.log('Результат валидации', string.match(expression));
-    console.log('Результат валидации2', expression.test(string));
+    // проверка на соответсвие строки из инпута, шаблонной регулярке
+    if ( expression.test(string) ) {
+        return true;
+    } else {
+        return false;
+    }
 
-
-    return;
 }; // checkInputTemplRegular
 
 // функция для вывода сообщения об ошибке require, а так же о выделении инпута красным
-// TODO сделать более универсальную функцию
-function requireValidateStatusInDOM( isRequireInput, inputDOM ) {
+// TODO FIXME теперь это универсальная функция. ПЕРЕИМЕНУЙ ЕЕ И НАПИШИ ДОКУМЕНТАЦИЮ
+// TODO предусмотреть задание классов для отвалидированного поля, например зелененьким;)
+function requireValidateStatusInDOM( isErrorInInput, inputDOM, validatorErrorMsg ) {
     let parentDOM = inputDOM.parentElement;
     let nextDOM = inputDOM.nextElementSibling;
-    if ( isRequireInput === false ) {
+    if ( isErrorInInput === false ) {
         parentDOM.classList.add('has-error');
-        nextDOM.innerHTML = 'Поле является обязательным для заполнения';
+        nextDOM.innerHTML = validatorErrorMsg;
     } else {
         parentDOM.classList.remove('has-error');
-        nextDOM.innerHTML = '';
+        nextDOM.innerHTML = validators.clean.errorMsg;
     }
     return;
 }; //requireErrValidateStatusInDOM
@@ -118,34 +135,39 @@ function requireValidateStatusInDOM( isRequireInput, inputDOM ) {
 // Вадидация формы
 function handleFormValidate(e, form) {
     e.preventDefault();
+    let checkStatus = false;
     let checkFormStatus = false;
     let isNeedFormValidate = form.getAttribute('data-js-validation');
+    let allFormInputs = undefined;
+    let isRequire = '';
+    let validator = '';
+    let customValidator = '';
+
     if ( isNeedFormValidate === 'true' ) {
-        let allFormInputs = undefined;
         allFormInputs = form.getElementsByTagName('input');
 
         if ( allFormInputs.length !== 0 ) {
             // проверка на ОБЯЗАТЕЛЬНОСТЬ полей
             for (let i=0;i<allFormInputs.length;i++) {
-                let isRequire = allFormInputs[i].getAttribute('data-validation-require');
+                isRequire = allFormInputs[i].getAttribute('data-validation-require');
                 if ( isRequire === 'true' ) {
-                    let checkStatus = checkInputForRequire( allFormInputs[i] );
+                    checkStatus = checkInputForRequire( allFormInputs[i] );
                     checkFormStatus = checkStatus;
-                    requireValidateStatusInDOM( checkStatus, allFormInputs[i] );
+                    requireValidateStatusInDOM( checkStatus, allFormInputs[i], validators.requireField.errorMsg );
                 }
             }  // окончание проверки на ОБЯЗАТЕЛЬНОСТЬ полей
 
             // проверка полей на соответсвие вводимых значений
             if ( checkFormStatus ) {
                 for (let i=0;i<allFormInputs.length;i++) {
-                    // console.log( 'allFormInputs['+i+']', allFormInputs[i] );
-                    let validator = allFormInputs[i].getAttribute('data-validation-templ');
-                    let customValidator = allFormInputs[i].getAttribute('data-validation-custom');
+                    validator = allFormInputs[i].getAttribute('data-validation-templ');
+                    customValidator = allFormInputs[i].getAttribute('data-validation-custom');
 
                     if ( validator ) {
-                        checkInputTemplRegular( validator, allFormInputs[i] )
+                        checkStatus = checkInputTemplRegular( validator, allFormInputs[i] )
+                        requireValidateStatusInDOM( checkStatus, allFormInputs[i], validators[validator].errorMsg );
                     } else if ( customValidator ) {
-                        // вызывать функцию для проверки кастомной регулярки
+                        // TODO вызывать функцию для проверки кастомной регулярки
                     }
 
                 }
