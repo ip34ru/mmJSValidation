@@ -10,9 +10,12 @@
 #### Скрипт для проверки вводимых значений в полях форм
 
 #### Структура HTML форм
+
+Внимание! Внутри формы желательно использовать атрибут novalidate
+
 ``` html
 <div class="container" id="validateThisID">
-    <form id="form1" class="" action="" method="">
+    <form id="form1" novalidate class="" action="" method="">
         <div class="form-group">
             <label class="control-label">...</label>
             <input type="email" class="form-control" placeholder="...">
@@ -25,7 +28,7 @@
         </div>
     </form>
 
-    <form id="form2" class="" action="index.html" method="post">
+    <form id="form2" novalidate class="" action="index.html" method="post">
         <div class="form-group">
             <label class="control-label">...</label>
             <input type="email" class="form-control" placeholder="...">

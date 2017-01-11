@@ -154,9 +154,6 @@ export function handleFormValidate(e) {
                             checkFormStatus = checkStatus;
                             setValidateStatusInDOM( checkStatus, allFormInputs[i], validators[validator].errorMsg );
 
-                            console.log('customValidator =', customValidator);
-                            console.log('customValidatorArray =', customValidatorArray);
-
                             // почистим объект кастомного валидатора
                             validators.customValidator.regExprPattern = '';
                             validators.customValidator.regExprFlags = '';
