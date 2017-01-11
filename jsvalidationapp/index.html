@@ -18,7 +18,7 @@
 </head>
 <body>
 
-    <div class="container">
+    <div class="container" id="validateThisID">
         <form data-js-validation="true" id="form1">
             <div class="form-group">
                 <label class="control-label" for="exampleInputEmail1">Email address</label>
@@ -40,6 +40,7 @@
                 <label class="control-label" for="">Phone2</label>
                 <input type="text" class="form-control" placeholder="Phone"
                     data-validation-custom="customString"
+                    data-validation-require="true"
                     >
                 <span class="help-block"></span>
             </div>
@@ -54,7 +55,9 @@
         <form data-js-validation="false" id="form2">
             <div class="form-group">
                 <label class="control-label">Email address</label>
-                <input type="email" class="form-control" placeholder="Email">
+                <input type="email" class="form-control" placeholder="Email"
+                data-validation-require="true"
+                >
                 <span class="help-block"></span>
             </div>
             <div class="form-group has-error">

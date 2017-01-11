@@ -2,26 +2,9 @@
 
 import { handleFormValidate } from '../lib/mm-form-validation.module';
 
-
-// TODO вынести в отдельную функцию код добавления(удаления) сообщения
-// при валидации полей формы
-
-let form1 = document.getElementById('form1');
-let form2 = document.getElementById('form2');
-let form1SubmitBtn = document.getElementById('form1SubmitBtn');
-let form2SubmitBtn = document.getElementById('form2SubmitBtn');
-
-
-
-
-
-
-
-
-
+let validateInArticlesExample = document.getElementById('validateThisID');
 
 // события на DOM элементах ====================================================
-// событие клик на кнопке "крестик"(перемещение справа-на-лево) в левой и правых стронах
-form1SubmitBtn.addEventListener('click', (e) => { handleFormValidate(e, form1); } );
-form2SubmitBtn.addEventListener('click', (e) => { handleFormValidate(e, form2); } );
+// событие сабмит формы
+validateInArticlesExample.addEventListener('submit', (e) => { handleFormValidate(e); } );
 // события на DOM элементах ====================================================

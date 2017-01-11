@@ -91,77 +91,78 @@
             nextDOM.innerHTML = $$$lib$mm$form$validation$module$$validators.clean.errorMsg;
         }
         return;
-    }function $$$lib$mm$form$validation$module$$handleFormValidate(e, form) {
-        e.preventDefault();
+    }function $$$lib$mm$form$validation$module$$handleFormValidate(e) {
+        let target = e.target;
         let checkStatus = false;
         let checkFormStatus = false;
-        let isNeedFormValidate = form.getAttribute('data-js-validation');
+        let isNeedFormValidate = undefined;
         let allFormInputs = undefined;
         let isRequire = '';
         let validator = '';
         let customValidator = '';
+        target.noValidate = true;          // Отключить браузерную валидацию для формы
     
-        if ( isNeedFormValidate === 'true' ) {
-            allFormInputs = form.getElementsByTagName('input');
+        if ( target.tagName === 'FORM' ) {
+            isNeedFormValidate = target.getAttribute('data-js-validation');
+            if ( isNeedFormValidate === 'true' ) {
+                allFormInputs = target.getElementsByTagName('input');
     
-            if ( allFormInputs.length !== 0 ) {
-                // проверка на ОБЯЗАТЕЛЬНОСТЬ полей
-                for (let i=0;i<allFormInputs.length;i++) {
-                    isRequire = allFormInputs[i].getAttribute('data-validation-require');
-                    if ( isRequire === 'true' ) {
-                        checkStatus = $$$lib$mm$form$validation$module$$checkInputForRequire( allFormInputs[i] );
-                        checkFormStatus = checkStatus;
-                        $$$lib$mm$form$validation$module$$setValidateStatusInDOM( checkStatus, allFormInputs[i], $$$lib$mm$form$validation$module$$validators.requireField.errorMsg );
-                    }
-                }  // окончание проверки на ОБЯЗАТЕЛЬНОСТЬ полей
-    
-                // проверка полей на соответсвие вводимых значений
-                if ( checkFormStatus ) {
+                if ( allFormInputs.length !== 0 ) {
+                    // проверка на ОБЯЗАТЕЛЬНОСТЬ полей
                     for (let i=0;i<allFormInputs.length;i++) {
-                        validator = allFormInputs[i].getAttribute('data-validation-templ');
-                        customValidator = allFormInputs[i].getAttribute('data-validation-custom');
-    
-                        if ( validator ) {
-                            checkStatus = $$$lib$mm$form$validation$module$$checkInputTemplRegular( validator, allFormInputs[i] )
-                            $$$lib$mm$form$validation$module$$setValidateStatusInDOM( checkStatus, allFormInputs[i], $$$lib$mm$form$validation$module$$validators[validator].errorMsg );
-                        } else if ( customValidator ) {
-                            // TODO вызывать функцию для проверки кастомной регулярки
+                        isRequire = allFormInputs[i].getAttribute('data-validation-require');
+                        if ( isRequire === 'true' ) {
+                            checkStatus = $$$lib$mm$form$validation$module$$checkInputForRequire( allFormInputs[i] );
+                            checkFormStatus = checkStatus;
+                            $$$lib$mm$form$validation$module$$setValidateStatusInDOM( checkStatus, allFormInputs[i], $$$lib$mm$form$validation$module$$validators.requireField.errorMsg );
                         }
+                    }  // окончание проверки на ОБЯЗАТЕЛЬНОСТЬ полей
     
+                    // проверка полей на соответсвие вводимых значений
+                    if ( checkFormStatus ) {
+                        for (let i=0;i<allFormInputs.length;i++) {
+                            validator = allFormInputs[i].getAttribute('data-validation-templ');
+                            customValidator = allFormInputs[i].getAttribute('data-validation-custom');
+    
+                            if ( validator ) {
+                                checkStatus = $$$lib$mm$form$validation$module$$checkInputTemplRegular( validator, allFormInputs[i] )
+                                checkFormStatus = checkStatus;
+                                $$$lib$mm$form$validation$module$$setValidateStatusInDOM( checkStatus, allFormInputs[i], $$$lib$mm$form$validation$module$$validators[validator].errorMsg );
+                            } else if ( customValidator ) {
+                                // TODO вызывать функцию для проверки кастомной регулярки
+                            }
+    
+                        }
+                    } // окончание проверки полей на соответсвие вводимых значений
+    
+                    // Если в инпутах формы есть ошибки, то форму не отправлять
+                    if ( !checkFormStatus ) {
+                        console.log('В инпутах есть ошибка. Форма не отправлена');
+                        e.preventDefault();
+                    } else {
+                        console.log('Ошибок нет. Форма отправлена!');
+                        e.preventDefault();
                     }
-                } // окончание проверки полей на соответсвие вводимых значений
     
+                } else {
+                    e.preventDefault();
+                    return;
+                }
             } else {
-                return;
+                // TODO здесь отдавать в BACK-END, убрать preventDefault
+                console.log('Форма поехала АЯКСОМ в бекэнд');
+                e.preventDefault();
             }
-        } else {
-            // TODO здесь отдавать в BACK-END
         }
+    
     
     }'use strict';
 
-
-    // TODO вынести в отдельную функцию код добавления(удаления) сообщения
-    // при валидации полей формы
-
-    let jsvalidationapp$script$script$$form1 = document.getElementById('form1');
-    let jsvalidationapp$script$script$$form2 = document.getElementById('form2');
-    let jsvalidationapp$script$script$$form1SubmitBtn = document.getElementById('form1SubmitBtn');
-    let jsvalidationapp$script$script$$form2SubmitBtn = document.getElementById('form2SubmitBtn');
-
-
-
-
-
-
-
-
-
+    let jsvalidationapp$script$script$$validateInArticlesExample = document.getElementById('validateThisID');
 
     // события на DOM элементах ====================================================
-    // событие клик на кнопке "крестик"(перемещение справа-на-лево) в левой и правых стронах
-    jsvalidationapp$script$script$$form1SubmitBtn.addEventListener('click', (e) => { $$$lib$mm$form$validation$module$$handleFormValidate(e, jsvalidationapp$script$script$$form1); } );
-    jsvalidationapp$script$script$$form2SubmitBtn.addEventListener('click', (e) => { $$$lib$mm$form$validation$module$$handleFormValidate(e, jsvalidationapp$script$script$$form2); } );
+    // событие сабмит формы
+    jsvalidationapp$script$script$$validateInArticlesExample.addEventListener('submit', (e) => { $$$lib$mm$form$validation$module$$handleFormValidate(e); } );
 }).call(this);
 
 //# sourceMappingURL=script.js.map

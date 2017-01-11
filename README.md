@@ -11,7 +11,7 @@
 
 #### Структура HTML форм
 ``` html
-<div class="" id="validateThisID">
+<div class="container" id="validateThisID">
     <form id="form1" class="" action="" method="">
         <div class="form-group">
             <label class="control-label">...</label>

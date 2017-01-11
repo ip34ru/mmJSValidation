@@ -94,52 +94,70 @@ function setValidateStatusInDOM( isErrorInInput, inputDOM, validatorErrorMsg ) {
 
 // Обработчики событий =========================================================
 // Вадидация формы. Экспортируемая функция
-export function handleFormValidate(e, form) {
-    e.preventDefault();
+export function handleFormValidate(e) {
+    let target = e.target;
     let checkStatus = false;
     let checkFormStatus = false;
-    let isNeedFormValidate = form.getAttribute('data-js-validation');
+    let isNeedFormValidate = undefined;
     let allFormInputs = undefined;
     let isRequire = '';
     let validator = '';
     let customValidator = '';
+    target.noValidate = true;          // Отключить браузерную валидацию для формы
 
-    if ( isNeedFormValidate === 'true' ) {
-        allFormInputs = form.getElementsByTagName('input');
+    if ( target.tagName === 'FORM' ) {
+        isNeedFormValidate = target.getAttribute('data-js-validation');
+        if ( isNeedFormValidate === 'true' ) {
+            allFormInputs = target.getElementsByTagName('input');
 
-        if ( allFormInputs.length !== 0 ) {
-            // проверка на ОБЯЗАТЕЛЬНОСТЬ полей
-            for (let i=0;i<allFormInputs.length;i++) {
-                isRequire = allFormInputs[i].getAttribute('data-validation-require');
-                if ( isRequire === 'true' ) {
-                    checkStatus = checkInputForRequire( allFormInputs[i] );
-                    checkFormStatus = checkStatus;
-                    setValidateStatusInDOM( checkStatus, allFormInputs[i], validators.requireField.errorMsg );
-                }
-            }  // окончание проверки на ОБЯЗАТЕЛЬНОСТЬ полей
-
-            // проверка полей на соответсвие вводимых значений
-            if ( checkFormStatus ) {
+            if ( allFormInputs.length !== 0 ) {
+                // проверка на ОБЯЗАТЕЛЬНОСТЬ полей
                 for (let i=0;i<allFormInputs.length;i++) {
-                    validator = allFormInputs[i].getAttribute('data-validation-templ');
-                    customValidator = allFormInputs[i].getAttribute('data-validation-custom');
-
-                    if ( validator ) {
-                        checkStatus = checkInputTemplRegular( validator, allFormInputs[i] )
-                        setValidateStatusInDOM( checkStatus, allFormInputs[i], validators[validator].errorMsg );
-                    } else if ( customValidator ) {
-                        // TODO вызывать функцию для проверки кастомной регулярки
+                    isRequire = allFormInputs[i].getAttribute('data-validation-require');
+                    if ( isRequire === 'true' ) {
+                        checkStatus = checkInputForRequire( allFormInputs[i] );
+                        checkFormStatus = checkStatus;
+                        setValidateStatusInDOM( checkStatus, allFormInputs[i], validators.requireField.errorMsg );
                     }
+                }  // окончание проверки на ОБЯЗАТЕЛЬНОСТЬ полей
 
+                // проверка полей на соответсвие вводимых значений
+                if ( checkFormStatus ) {
+                    for (let i=0;i<allFormInputs.length;i++) {
+                        validator = allFormInputs[i].getAttribute('data-validation-templ');
+                        customValidator = allFormInputs[i].getAttribute('data-validation-custom');
+
+                        if ( validator ) {
+                            checkStatus = checkInputTemplRegular( validator, allFormInputs[i] )
+                            checkFormStatus = checkStatus;
+                            setValidateStatusInDOM( checkStatus, allFormInputs[i], validators[validator].errorMsg );
+                        } else if ( customValidator ) {
+                            // TODO вызывать функцию для проверки кастомной регулярки
+                        }
+
+                    }
+                } // окончание проверки полей на соответсвие вводимых значений
+
+                // Если в инпутах формы есть ошибки, то форму не отправлять
+                if ( !checkFormStatus ) {
+                    console.log('В инпутах есть ошибка. Форма не отправлена');
+                    e.preventDefault();
+                } else {
+                    console.log('Ошибок нет. Форма отправлена!');
+                    e.preventDefault();
                 }
-            } // окончание проверки полей на соответсвие вводимых значений
 
+            } else {
+                e.preventDefault();
+                return;
+            }
         } else {
-            return;
+            // TODO здесь отдавать в BACK-END, убрать preventDefault
+            console.log('Форма поехала АЯКСОМ в бекэнд');
+            e.preventDefault();
         }
-    } else {
-        // TODO здесь отдавать в BACK-END
     }
+
 
 } // handleFormValidate
 // Обработчики событий =========================================================
