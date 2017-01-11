@@ -9,15 +9,46 @@
 
 #### Скрипт для проверки вводимых значений в полях форм
 
-структура HTML формы
+### Структура HTML форм
 ``` html
-<div class="form-group">
-    <label class="control-label">...</label>
-    <input type="email" class="form-control" placeholder="...">
-    <span class="help-block"></span>
+<div class="" id="validateThisID">
+    <form id="form1" class="" action="" method="">
+        <div class="form-group">
+            <label class="control-label">...</label>
+            <input type="email" class="form-control" placeholder="...">
+            <span class="help-block"></span>
+        </div>
+        <div class="form-group">
+            <label class="control-label">...</label>
+            <input type="email" class="form-control" placeholder="...">
+            <span class="help-block"></span>
+        </div>
+    </form>
+
+    <form id="form2" class="" action="index.html" method="post">
+        <div class="form-group">
+            <label class="control-label">...</label>
+            <input type="email" class="form-control" placeholder="...">
+            <span class="help-block"></span>
+        </div>
+        <div class="form-group">
+            <label class="control-label">...</label>
+            <input type="email" class="form-control" placeholder="...">
+            <span class="help-block"></span>
+        </div>
+    </form>
+
 </div>
 ```
-только в таком виде навешивание стандартных bootstrap классов для валидации будет подкрашивать элементы формы
+В таком виде навешивание стандартных bootstrap классов на <div class="form-group"> для валидации будет подкрашивать элементы формы.
+
+В обработчике модуля используется делегирование и события отрабатывают только на форме.
+
+Как должен навешиваться обработчик события:
+``` javascript
+let submittedForms = document.getElementById('validateThisID');
+submittedForms.addEventListener('submit', (e) => { handleFormValidate(e); } );
+```
 
 ====
 
@@ -35,19 +66,24 @@ data-js-validation="true"
 data-validation-require="true"
 ```
 в случае если нужно быстро отключить проверку на обязательное поле, то ставим значение атрибута равное false
+
 ====
 
-Шаблоны по которым можно валидиролвать:
+#### Шаблоны по которым можно валидиролвать:
 ```
 data-validation-templ=
 ```
 указываем различные шаблоны, которые берем из настроечного объекта
 @Param validators {object} объект в котором шаблоны со строками в виде регулярных выражений
 
+===
+
+#### Шаблоны для валидирования устанавливаемые самостоятельно внутри data-атрибута
 ```
 data-validation-custom=""
 ```
 в значении можно указывать кастомную строку следующего формата:
 "['regExpr','regExprFlags','errorMsg']"
 данная строка будет преобразовываться в массив
+
 ====
