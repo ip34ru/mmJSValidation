@@ -1,7 +1,7 @@
 ## JS-валидация input полей moremam.ru
 ====
 
-### v 0.0.2
+### v 1.0.0
 ====
 
 ## Описание скрипта
@@ -89,5 +89,18 @@ data-validation-custom=""
 ====
 
 ```data-validation-templ=``` и ```data-validation-custom=""``` не могут использоваться вместе, их можно оставлять в коде только по одному для валидируемого инпута.
+
+====
+
+#### Как собрать ES6-модуль и использовать его для ES5 браузеров?
+
+Используется [ES6 Module Transpiler](https://esnext.github.io/es6-module-transpiler/)
+
+По сути, можно воспользоваться вот этими двумя простыми командами:
+
+```
+npm install -g es6-module-transpiler
+compile-modules convert -I lib -o jsvalidationapp/build/script.js jsvalidationapp/script/script.js
+```
 
 ====

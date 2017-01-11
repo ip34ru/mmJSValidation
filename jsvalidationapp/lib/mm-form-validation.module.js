@@ -71,7 +71,6 @@ function checkInputTemplRegular( validatorStr, inputDOM ) {
 }; // checkInputTemplRegular
 
 // функция для вывода сообщения об ошибке и выделении инпута в цвет ошибки (например красный)
-// TODO FIXME теперь это универсальная функция. ПЕРЕИМЕНУЙ ЕЕ И НАПИШИ ДОКУМЕНТАЦИЮ
 // TODO предусмотреть задание классов для отвалидированного поля, например зелененьким;)
 /**
  * setValidateStatusInDOM сообщение об ошибке, если поле не прошло валидацию
@@ -94,8 +93,8 @@ function setValidateStatusInDOM( isErrorInInput, inputDOM, validatorErrorMsg ) {
 // вспомогательные функции======================================================
 
 // Обработчики событий =========================================================
-// Вадидация формы
-function handleFormValidate(e, form) {
+// Вадидация формы. Экспортируемая функция
+export function handleFormValidate(e, form) {
     e.preventDefault();
     let checkStatus = false;
     let checkFormStatus = false;
@@ -141,7 +140,6 @@ function handleFormValidate(e, form) {
     } else {
         // TODO здесь отдавать в BACK-END
     }
-
 
 } // handleFormValidate
 // Обработчики событий =========================================================

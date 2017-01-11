@@ -1,5 +1,6 @@
 'use strict';
 
+import { handleFormValidate } from '../lib/mm-form-validation.module';
 
 
 // TODO вынести в отдельную функцию код добавления(удаления) сообщения

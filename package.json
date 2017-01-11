@@ -1,0 +1,25 @@
+{
+  "name": "mm-js-validation",
+  "version": "1.0.0",
+  "description": "JavaScript validation fot bootstrap-forms",
+  "main": "index.js",
+  "dependencies": {
+    "babelify": "^7.3.0"
+  },
+  "devDependencies": {
+    "babelify": "^7.3.0"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ip34ru/mmJSValidation.git"
+  },
+  "author": "ip34.ru",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ip34ru/mmJSValidation/issues"
+  },
+  "homepage": "https://github.com/ip34ru/mmJSValidation#readme"
+}
