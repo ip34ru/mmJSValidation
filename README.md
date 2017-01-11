@@ -15,28 +15,39 @@
 
 ``` html
 <div class="container" id="validateThisID">
-    <form id="form1" novalidate class="" action="" method="">
+    <form id="form1" data-js-validation="true" novalidate class="" action="" method="">
         <div class="form-group">
             <label class="control-label">...</label>
-            <input type="email" class="form-control" placeholder="...">
+            <input type="email" class="form-control" placeholder="..."
+            data-validation-require="true"
+            data-validation-templ="email"
+            >
             <span class="help-block"></span>
         </div>
         <div class="form-group">
             <label class="control-label">...</label>
-            <input type="email" class="form-control" placeholder="...">
+            <input type="email" class="form-control" placeholder="..."
+            data-validation-require="false"
+            data-validation-templ="phone"
+            >
             <span class="help-block"></span>
         </div>
     </form>
 
-    <form id="form2" novalidate class="" action="index.html" method="post">
+    <form id="form2" data-js-validation="false" novalidate class="" action="index.html" method="post">
         <div class="form-group">
             <label class="control-label">...</label>
-            <input type="email" class="form-control" placeholder="...">
+            <input type="email" class="form-control" placeholder="..."
+            data-validation-require="true"
+            data-validation-custom="'.+@.+\\..+';'i';'КАСТОМ!!! В поле нужно вводить email, в формате: someaddress@domain.xxx'"
+            >
             <span class="help-block"></span>
         </div>
         <div class="form-group">
             <label class="control-label">...</label>
-            <input type="email" class="form-control" placeholder="...">
+            <input type="email" class="form-control" placeholder="..."
+            data-validation-require="true"
+            >
             <span class="help-block"></span>
         </div>
     </form>
