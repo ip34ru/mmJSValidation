@@ -21,6 +21,11 @@ let validators = {
         regExprPattern: '.+@.+\\..+',
         regExprFlags: 'i',
         errorMsg: 'В поле нужно вводить email, в формате: someaddress@domain.xxx'
+    },
+    customValidator: {
+        regExprPattern: '',
+        regExprFlags: '',
+        errorMsg: ''
     }
 };
 // установочные переменые ======================================================
@@ -132,7 +137,30 @@ export function handleFormValidate(e) {
                             checkFormStatus = checkStatus;
                             setValidateStatusInDOM( checkStatus, allFormInputs[i], validators[validator].errorMsg );
                         } else if ( customValidator ) {
-                            // TODO вызывать функцию для проверки кастомной регулярки
+                            let customValidatorArray = customValidator.split(';')
+                            let validator = 'customValidator'
+
+                            // уберрем кавычки из начала и конца строки
+                            for (let i=0;i<customValidatorArray.length;i++) {
+                                customValidatorArray[i] = customValidatorArray[i].slice(1, -1);
+                            }
+
+                            // наполним объект кастомной строкой для валидации
+                            validators.customValidator.regExprPattern = customValidatorArray[0];
+                            validators.customValidator.regExprFlags = customValidatorArray[1];
+                            validators.customValidator.errorMsg = customValidatorArray[2];
+
+                            checkStatus = checkInputTemplRegular( validator, allFormInputs[i] )
+                            checkFormStatus = checkStatus;
+                            setValidateStatusInDOM( checkStatus, allFormInputs[i], validators[validator].errorMsg );
+
+                            console.log('customValidator =', customValidator);
+                            console.log('customValidatorArray =', customValidatorArray);
+
+                            // почистим объект кастомного валидатора
+                            validators.customValidator.regExprPattern = '';
+                            validators.customValidator.regExprFlags = '';
+                            validators.customValidator.errorMsg = '';
                         }
 
                     }

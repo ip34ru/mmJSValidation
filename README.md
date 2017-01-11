@@ -83,8 +83,10 @@ data-validation-templ=
 data-validation-custom=""
 ```
 в значении можно указывать кастомную строку следующего формата:
-"['regExpr','regExprFlags','errorMsg']"
+```"'regExpr';'regExprFlags';'errorMsg'"```
 данная строка будет преобразовываться в массив
+
+Пример: ```data-validation-custom="'.+@.+\\..+';'i';'В поле нужно вводить email, в формате: someaddress@domain.xxx'"```
 
 ====
 

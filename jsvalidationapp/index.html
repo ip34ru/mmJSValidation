@@ -19,7 +19,7 @@
 <body>
 
     <div class="container" id="validateThisID">
-        <form data-js-validation="true" id="form1">
+        <form data-js-validation="true" novalidate id="form1">
             <div class="form-group">
                 <label class="control-label" for="exampleInputEmail1">Email address</label>
                 <input type="email" class="form-control" placeholder="Email"
@@ -52,11 +52,12 @@
 
         <hr>
 
-        <form data-js-validation="false" id="form2">
+        <form data-js-validation="true" novalidate id="form2">
             <div class="form-group">
                 <label class="control-label">Email address</label>
                 <input type="email" class="form-control" placeholder="Email"
                 data-validation-require="true"
+                data-validation-custom="'.+@.+\\..+';'i';'КАСТОМ!!! В поле нужно вводить email, в формате: someaddress@domain.xxx'"
                 >
                 <span class="help-block"></span>
             </div>
