@@ -151,9 +151,6 @@
                                 checkFormStatus = checkStatus;
                                 $$$lib$mm$form$validation$module$$setValidateStatusInDOM( checkStatus, allFormInputs[i], $$$lib$mm$form$validation$module$$validators[validator].errorMsg );
     
-                                console.log('customValidator =', customValidator);
-                                console.log('customValidatorArray =', customValidatorArray);
-    
                                 // почистим объект кастомного валидатора
                                 $$$lib$mm$form$validation$module$$validators.customValidator.regExprPattern = '';
                                 $$$lib$mm$form$validation$module$$validators.customValidator.regExprFlags = '';

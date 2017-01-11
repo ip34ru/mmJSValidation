@@ -184,5 +184,5 @@ export function handleFormValidate(e) {
     }
 
 
-} // handleFormValidate
+}; // handleFormValidate
 // Обработчики событий =========================================================
