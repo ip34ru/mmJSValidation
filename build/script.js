@@ -3,7 +3,7 @@
     'use strict';
 
     // установочные переменые ======================================================
-    let $$$lib$mm$form$validation$module$$validators = {
+    let src$mm$form$validation$module$$validators = {
         classes : {
             hasError: 'has-error',
             hasSucess: 'has-success'
@@ -40,7 +40,7 @@
     * @return {boolean}                если поле пустое то возвращается false
     *                                  иначе true
     */
-    function $$$lib$mm$form$validation$module$$checkInputForRequire( inputDOM ) {
+    function src$mm$form$validation$module$$checkInputForRequire( inputDOM ) {
         if ( !inputDOM.value ) {
             return false;
         }
@@ -56,8 +56,8 @@
     * @return {boolean}                  если строка в поле совпадает с регуляркой, то true
     *                                    иначе false
     */
-    function $$$lib$mm$form$validation$module$$checkInputTemplRegular( validatorStr, inputDOM ) {
-        let validObj = $$$lib$mm$form$validation$module$$validators[validatorStr];
+    function src$mm$form$validation$module$$checkInputTemplRegular( validatorStr, inputDOM ) {
+        let validObj = src$mm$form$validation$module$$validators[validatorStr];
         let string = inputDOM.value;
         let expression;
     
@@ -85,18 +85,18 @@
      * @param {DOM Element}  inputDOM     DOM элемент, input из валидируемой формы
      * @param {string}  validatorErrorMsg сообщение об ошибке
      */
-    function $$$lib$mm$form$validation$module$$setValidateStatusInDOM( isErrorInInput, inputDOM, validatorErrorMsg ) {
+    function src$mm$form$validation$module$$setValidateStatusInDOM( isErrorInInput, inputDOM, validatorErrorMsg ) {
         let parentDOM = inputDOM.parentElement;
         let nextDOM = inputDOM.nextElementSibling;
         if ( isErrorInInput === false ) {
-            parentDOM.classList.add($$$lib$mm$form$validation$module$$validators.classes.hasError);
+            parentDOM.classList.add(src$mm$form$validation$module$$validators.classes.hasError);
             nextDOM.innerHTML = validatorErrorMsg;
         } else {
-            parentDOM.classList.remove($$$lib$mm$form$validation$module$$validators.classes.hasError);
-            nextDOM.innerHTML = $$$lib$mm$form$validation$module$$validators.clean.errorMsg;
+            parentDOM.classList.remove(src$mm$form$validation$module$$validators.classes.hasError);
+            nextDOM.innerHTML = src$mm$form$validation$module$$validators.clean.errorMsg;
         }
         return;
-    }function $$$lib$mm$form$validation$module$$handleFormValidate(e) {
+    }function src$mm$form$validation$module$$handleFormValidate(e) {
         let target = e.target;
         let checkStatus = false;
         let checkFormStatus = false;
@@ -117,9 +117,9 @@
                     for (let i=0;i<allFormInputs.length;i++) {
                         isRequire = allFormInputs[i].getAttribute('data-validation-require');
                         if ( isRequire === 'true' ) {
-                            checkStatus = $$$lib$mm$form$validation$module$$checkInputForRequire( allFormInputs[i] );
+                            checkStatus = src$mm$form$validation$module$$checkInputForRequire( allFormInputs[i] );
                             checkFormStatus = checkStatus;
-                            $$$lib$mm$form$validation$module$$setValidateStatusInDOM( checkStatus, allFormInputs[i], $$$lib$mm$form$validation$module$$validators.requireField.errorMsg );
+                            src$mm$form$validation$module$$setValidateStatusInDOM( checkStatus, allFormInputs[i], src$mm$form$validation$module$$validators.requireField.errorMsg );
                         }
                     }  // окончание проверки на ОБЯЗАТЕЛЬНОСТЬ полей
     
@@ -130,9 +130,9 @@
                             customValidator = allFormInputs[i].getAttribute('data-validation-custom');
     
                             if ( validator ) {
-                                checkStatus = $$$lib$mm$form$validation$module$$checkInputTemplRegular( validator, allFormInputs[i] )
+                                checkStatus = src$mm$form$validation$module$$checkInputTemplRegular( validator, allFormInputs[i] )
                                 checkFormStatus = checkStatus;
-                                $$$lib$mm$form$validation$module$$setValidateStatusInDOM( checkStatus, allFormInputs[i], $$$lib$mm$form$validation$module$$validators[validator].errorMsg );
+                                src$mm$form$validation$module$$setValidateStatusInDOM( checkStatus, allFormInputs[i], src$mm$form$validation$module$$validators[validator].errorMsg );
                             } else if ( customValidator ) {
                                 let customValidatorArray = customValidator.split(';')
                                 let validator = 'customValidator'
@@ -143,18 +143,18 @@
                                 }
     
                                 // наполним объект кастомной строкой для валидации
-                                $$$lib$mm$form$validation$module$$validators.customValidator.regExprPattern = customValidatorArray[0];
-                                $$$lib$mm$form$validation$module$$validators.customValidator.regExprFlags = customValidatorArray[1];
-                                $$$lib$mm$form$validation$module$$validators.customValidator.errorMsg = customValidatorArray[2];
+                                src$mm$form$validation$module$$validators.customValidator.regExprPattern = customValidatorArray[0];
+                                src$mm$form$validation$module$$validators.customValidator.regExprFlags = customValidatorArray[1];
+                                src$mm$form$validation$module$$validators.customValidator.errorMsg = customValidatorArray[2];
     
-                                checkStatus = $$$lib$mm$form$validation$module$$checkInputTemplRegular( validator, allFormInputs[i] )
+                                checkStatus = src$mm$form$validation$module$$checkInputTemplRegular( validator, allFormInputs[i] )
                                 checkFormStatus = checkStatus;
-                                $$$lib$mm$form$validation$module$$setValidateStatusInDOM( checkStatus, allFormInputs[i], $$$lib$mm$form$validation$module$$validators[validator].errorMsg );
+                                src$mm$form$validation$module$$setValidateStatusInDOM( checkStatus, allFormInputs[i], src$mm$form$validation$module$$validators[validator].errorMsg );
     
                                 // почистим объект кастомного валидатора
-                                $$$lib$mm$form$validation$module$$validators.customValidator.regExprPattern = '';
-                                $$$lib$mm$form$validation$module$$validators.customValidator.regExprFlags = '';
-                                $$$lib$mm$form$validation$module$$validators.customValidator.errorMsg = '';
+                                src$mm$form$validation$module$$validators.customValidator.regExprPattern = '';
+                                src$mm$form$validation$module$$validators.customValidator.regExprFlags = '';
+                                src$mm$form$validation$module$$validators.customValidator.errorMsg = '';
                             }
     
                         }
@@ -181,13 +181,7 @@
         }
     
     
-    }'use strict';
-
-    let jsvalidationapp$script$script$$validateInArticlesExample = document.getElementById('validateThisID');
-
-    // события на DOM элементах ====================================================
-    // событие сабмит формы
-    jsvalidationapp$script$script$$validateInArticlesExample.addEventListener('submit', (e) => { $$$lib$mm$form$validation$module$$handleFormValidate(e); } );
+    }
 }).call(this);
 
 //# sourceMappingURL=script.js.map
