@@ -12,6 +12,7 @@
   },
   "scripts": {
     "build": "compile-modules convert -I lib -o  build/script.js src/mm-form-validation.module.js",
+    "buildTest": "compile-modules convert -I lib -o  test/js/index.js test/src/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
