@@ -2,14 +2,16 @@
   "name": "mm-js-validation",
   "version": "1.0.1",
   "description": "JavaScript validation fot bootstrap-forms",
-  "main": "index.js",
+  "main": "build/script.js",
   "dependencies": {
     "babelify": "^7.3.0"
   },
   "devDependencies": {
-    "babelify": "^7.3.0"
+    "babelify": "^7.3.0",
+    "es6-module-transpiler": "^0.10.0"
   },
   "scripts": {
+    "build": "compile-modules convert -I lib -o src/script.js /script.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
