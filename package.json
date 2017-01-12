@@ -11,7 +11,7 @@
     "es6-module-transpiler": "^0.10.0"
   },
   "scripts": {
-    "build": "compile-modules convert -I lib -o src/script.js /script.js",
+    "build": "compile-modules convert -I lib -o  build/script.js src/mm-form-validation.module.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {

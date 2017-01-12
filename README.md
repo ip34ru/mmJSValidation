@@ -118,8 +118,8 @@ data-validation-custom=""
 По сути, можно воспользоваться вот этими двумя простыми командами:
 
 ```
-npm install -g es6-module-transpiler
-compile-modules convert -I lib -o jsvalidationapp/build/script.js jsvalidationapp/script/script.js
+$ npm install
+$ npm run build
 ```
 
 ====
