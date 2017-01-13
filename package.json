@@ -2,7 +2,7 @@
   "name": "mm-js-validation",
   "version": "1.0.1",
   "description": "JavaScript validation fot bootstrap-forms",
-  "main": "build/script.js",
+  "main": "index.js",
   "dependencies": {
     "babelify": "^7.3.0"
   },
