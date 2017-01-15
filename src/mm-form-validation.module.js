@@ -98,16 +98,23 @@ function setValidateStatusInDOM( isErrorInInput, inputDOM, validatorErrorMsg ) {
 // вспомогательные функции======================================================
 
 // Обработчики событий =========================================================
-// Вадидация формы. Экспортируемая функция
-module.exports = function handleFormValidate(e) {
-    let target = e.target;
-    let checkStatus = false;
-    let checkFormStatus = false;
-    let isNeedFormValidate = undefined;
-    let allFormInputs = undefined;
-    let isRequire = '';
-    let validator = '';
-    let customValidator = '';
+
+/**
+ * [Вадидация формы. Экспортируемая функция]
+ * @param  {Event} e   [Event object]
+ * @param  {Boolean} log [Print logs to a console]
+ * @return {undefined}     [nothing]
+ */
+module.exports = function handleFormValidate(e, log) {
+    let isPrintLogs = log || false,
+    target = e.target,
+    checkStatus = false,
+    checkFormStatus = false,
+    isNeedFormValidate = undefined,
+    allFormInputs = undefined,
+    isRequire = '',
+    validator = '',
+    customValidator = '';
     target.noValidate = true;          // Отключить браузерную валидацию для формы
 
     if ( target.tagName === 'FORM' ) {
@@ -165,11 +172,10 @@ module.exports = function handleFormValidate(e) {
 
                 // Если в инпутах формы есть ошибки, то форму не отправлять
                 if ( !checkFormStatus ) {
-                    console.log('В инпутах есть ошибка. Форма не отправлена');
+                    if(isPrintLogs) console.log('В инпутах есть ошибка. Форма не отправлена');
                     e.preventDefault();
                 } else {
-                    console.log('Ошибок нет. Форма отправлена!');
-                    e.preventDefault();
+                    if(isPrintLogs) console.log('Ошибок нет. Форма отправлена!');
                 }
 
             } else {
@@ -178,8 +184,8 @@ module.exports = function handleFormValidate(e) {
             }
         } else {
             // TODO здесь отдавать в BACK-END, убрать preventDefault
-            console.log('Форма поехала АЯКСОМ в бекэнд');
-            e.preventDefault();
+            if(isPrintLogs) console.log('Форма поехала в бекэнд');
+
         }
     }
 

@@ -98,16 +98,23 @@ function setValidateStatusInDOM(isErrorInInput, inputDOM, validatorErrorMsg) {
 // вспомогательные функции======================================================
 
 // Обработчики событий =========================================================
-// Вадидация формы. Экспортируемая функция
-module.exports = function handleFormValidate(e) {
-    var target = e.target;
-    var checkStatus = false;
-    var checkFormStatus = false;
-    var isNeedFormValidate = undefined;
-    var allFormInputs = undefined;
-    var isRequire = '';
-    var validator = '';
-    var customValidator = '';
+
+/**
+ * [Вадидация формы. Экспортируемая функция]
+ * @param  {Event} e   [Event object]
+ * @param  {Boolean} log [Print logs to a console]
+ * @return {undefined}     [nothing]
+ */
+module.exports = function handleFormValidate(e, log) {
+    var isPrintLogs = log || false,
+        target = e.target,
+        checkStatus = false,
+        checkFormStatus = false,
+        isNeedFormValidate = undefined,
+        allFormInputs = undefined,
+        isRequire = '',
+        validator = '',
+        customValidator = '';
     target.noValidate = true; // Отключить браузерную валидацию для формы
 
     if (target.tagName === 'FORM') {
@@ -164,11 +171,10 @@ module.exports = function handleFormValidate(e) {
 
                 // Если в инпутах формы есть ошибки, то форму не отправлять
                 if (!checkFormStatus) {
-                    console.log('В инпутах есть ошибка. Форма не отправлена');
+                    if (isPrintLogs) console.log('В инпутах есть ошибка. Форма не отправлена');
                     e.preventDefault();
                 } else {
-                    console.log('Ошибок нет. Форма отправлена!');
-                    e.preventDefault();
+                    if (isPrintLogs) console.log('Ошибок нет. Форма отправлена!');
                 }
             } else {
                 e.preventDefault();
@@ -176,8 +182,7 @@ module.exports = function handleFormValidate(e) {
             }
         } else {
             // TODO здесь отдавать в BACK-END, убрать preventDefault
-            console.log('Форма поехала АЯКСОМ в бекэнд');
-            e.preventDefault();
+            if (isPrintLogs) console.log('Форма поехала в бекэнд');
         }
     }
 }; // handleFormValidate
