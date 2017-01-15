@@ -3,15 +3,8 @@
   "version": "1.0.1",
   "description": "JavaScript validation fot bootstrap-forms",
   "main": "index.js",
-  "dependencies": {
-    "babelify": "^7.3.0"
-  },
-  "devDependencies": {
-    "babelify": "^7.3.0",
-    "es6-module-transpiler": "^0.10.0"
-  },
   "scripts": {
-    "build": "compile-modules convert -I lib -o  build/script.js src/mm-form-validation.module.js",
+    "build": "babel src/mm-form-validation.module.js -o build/script.js --presets es2015",
     "buildTest": "compile-modules convert -I lib -o  test/js/index.js test/src/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -24,5 +17,9 @@
   "bugs": {
     "url": "https://github.com/ip34ru/mmJSValidation/issues"
   },
-  "homepage": "https://github.com/ip34ru/mmJSValidation#readme"
+  "homepage": "https://github.com/ip34ru/mmJSValidation#readme",
+  "dependencies": {
+    "babel-cli": "^6.18.0",
+    "babel-preset-es2015": "^6.18.0"
+  }
 }
