@@ -85,13 +85,14 @@ function checkInputTemplRegular( validatorStr, inputDOM ) {
  */
 function setValidateStatusInDOM( isErrorInInput, inputDOM, validatorErrorMsg ) {
     let parentDOM = inputDOM.parentElement;
-    let nextDOM = inputDOM.nextElementSibling;
+    // let nextDOM = inputDOM.nextElementSibling;             //OLD!!!
+    let nextDOM = parentDOM.getElementsByTagName('span');
     if ( isErrorInInput === false ) {
         parentDOM.classList.add(validators.classes.hasError);
-        nextDOM.innerHTML = validatorErrorMsg;
+        nextDOM[0].innerHTML = validatorErrorMsg;             //ищем самый первый span внутри родителя
     } else {
         parentDOM.classList.remove(validators.classes.hasError);
-        nextDOM.innerHTML = validators.clean.errorMsg;
+        nextDOM[0].innerHTML = validators.clean.errorMsg;
     }
     return;
 }; //requireErrValidateStatusInDOM
@@ -105,7 +106,7 @@ function setValidateStatusInDOM( isErrorInInput, inputDOM, validatorErrorMsg ) {
  * @param  {Boolean} log [Print logs to a console]
  * @return {undefined}     [nothing]
  */
-module.exports = function handleFormValidate(e, log) {
+export function handleFormValidate(e, log) {
     let isPrintLogs = log || false,
     target = e.target,
     checkStatus = false,
@@ -144,8 +145,8 @@ module.exports = function handleFormValidate(e, log) {
                             checkFormStatus = checkStatus;
                             setValidateStatusInDOM( checkStatus, allFormInputs[i], validators[validator].errorMsg );
                         } else if ( customValidator ) {
-                            let customValidatorArray = customValidator.split(';')
-                            let validator = 'customValidator'
+                            let customValidatorArray = customValidator.split(';');
+                            let validator = 'customValidator';
 
                             // уберрем кавычки из начала и конца строки
                             for (let i=0;i<customValidatorArray.length;i++) {
@@ -157,6 +158,8 @@ module.exports = function handleFormValidate(e, log) {
                             validators.customValidator.regExprFlags = customValidatorArray[1];
                             validators.customValidator.errorMsg = customValidatorArray[2];
 
+                            console.log(validators);
+
                             checkStatus = checkInputTemplRegular( validator, allFormInputs[i] )
                             checkFormStatus = checkStatus;
                             setValidateStatusInDOM( checkStatus, allFormInputs[i], validators[validator].errorMsg );
@@ -165,6 +168,8 @@ module.exports = function handleFormValidate(e, log) {
                             validators.customValidator.regExprPattern = '';
                             validators.customValidator.regExprFlags = '';
                             validators.customValidator.errorMsg = '';
+
+                            console.log(validators);
                         }
 
                     }

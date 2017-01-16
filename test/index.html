@@ -26,6 +26,9 @@
                     data-validation-require="true"
                     data-validation-templ="email"
                     >
+                <p>
+                    Lorem ipsum.
+                </p>
                 <span class="help-block"></span>
             </div>
             <div class="form-group">
@@ -57,8 +60,10 @@
                 <label class="control-label">Email address</label>
                 <input type="email" class="form-control" placeholder="Email"
                 data-validation-require="true"
-                data-validation-custom="'.+@.+\\..+';'i';'КАСТОМ!!! В поле нужно вводить email, в формате: someaddress@domain.xxx'"
+                data-validation-custom="'.+@.+\..+';'i';'КАСТОМ!!! В поле нужно вводить email, в формате: someaddress@domain.xxx'"
                 >
+                <!-- TODO проверить в винде и линуксе, различие между \\ и \ -->
+                <!-- data-validation-custom="'.+@.+\\..+';'i';'КАСТОМ!!! В поле нужно вводить email, в формате: someaddress@domain.xxx'"    -->
                 <span class="help-block"></span>
             </div>
             <div class="form-group has-error">
@@ -77,7 +82,7 @@
     </div>
 
     <!-- CustomJS -->
-    <script type="text/javascript" src="../build/script.js"></script>
+    <!-- <script type="text/javascript" src="../build/script.js"></script> -->
     <script type="text/javascript" src="js/index.js"></script>
 </body>
 </html>
