@@ -1,7 +1,7 @@
 ## JS-валидация input полей moremam.ru
 ====
 
-### v 1.0.1
+### v 1.1.0
 ====
 
 ## Описание скрипта
@@ -39,7 +39,7 @@
             <label class="control-label">...</label>
             <input type="email" class="form-control" placeholder="..."
             data-validation-require="true"
-            data-validation-custom="'.+@.+\\..+';'i';'КАСТОМ!!! В поле нужно вводить email, в формате: someaddress@domain.xxx'"
+            data-validation-custom="'.+@.+\..+';'i';'КАСТОМ!!! В поле нужно вводить email, в формате: someaddress@domain.xxx'"
             >
             <span class="help-block"></span>
         </div>
@@ -103,8 +103,8 @@ data-validation-custom=""
 ```
 данная строка будет преобразовываться в массив
 
-Пример: ```data-validation-custom="'.+@.+\\..+';'i';'В поле нужно вводить email, в формате: someaddress@domain.xxx'"```
-
+Пример: ```data-validation-custom="'.+@.+\..+';'i';'В поле нужно вводить email, в формате: someaddress@domain.xxx'"```
+Замечание: В ```'regExpr'``` используется один обратный слеш (\), вместо двух (\\)
 ====
 
 ```data-validation-templ=``` и ```data-validation-custom=""``` не могут использоваться вместе, их можно оставлять в коде только по одному для валидируемого инпута.
@@ -117,9 +117,16 @@ data-validation-custom=""
 
 По сути, можно воспользоваться вот этими двумя простыми командами:
 
+Для рабочего проекта:
 ```
 $ npm install
 $ npm run build
+```
+
+Для тестового проекта:
+```
+$ npm install
+$ npm run buildTest
 ```
 
 ====

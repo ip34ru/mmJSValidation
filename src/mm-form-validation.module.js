@@ -1,6 +1,6 @@
 'use strict';
 
-// установочные переменые 123 ======================================================
+// установочные переменые ======================================================
 let validators = {
     classes : {
         hasError: 'has-error',
@@ -85,13 +85,13 @@ function checkInputTemplRegular( validatorStr, inputDOM ) {
  */
 function setValidateStatusInDOM( isErrorInInput, inputDOM, validatorErrorMsg ) {
     let parentDOM = inputDOM.parentElement;
-    let nextDOM = inputDOM.nextElementSibling;
+    let nextDOM = parentDOM.getElementsByTagName('span');
     if ( isErrorInInput === false ) {
         parentDOM.classList.add(validators.classes.hasError);
-        nextDOM.innerHTML = validatorErrorMsg;
+        nextDOM[0].innerHTML = validatorErrorMsg;             //берем самый первый span внутри родителя
     } else {
         parentDOM.classList.remove(validators.classes.hasError);
-        nextDOM.innerHTML = validators.clean.errorMsg;
+        nextDOM[0].innerHTML = validators.clean.errorMsg;
     }
     return;
 }; //requireErrValidateStatusInDOM
@@ -119,35 +119,65 @@ module.exports = function handleFormValidate(e, log) {
 
     if ( target.tagName === 'FORM' ) {
         isNeedFormValidate = target.getAttribute('data-js-validation');
+        // Проверка формы на, то требует ли фолрма валидации с помощью mmJSValadation
         if ( isNeedFormValidate === 'true' ) {
             allFormInputs = target.getElementsByTagName('input');
 
+            // Проверка на наличие инпуитов в форме
             if ( allFormInputs.length !== 0 ) {
-                // проверка на ОБЯЗАТЕЛЬНОСТЬ полей
+                // Проверка всех полей в единственном цикле
                 for (let i=0;i<allFormInputs.length;i++) {
                     isRequire = allFormInputs[i].getAttribute('data-validation-require');
+                    validator = allFormInputs[i].getAttribute('data-validation-templ');
+                    customValidator = allFormInputs[i].getAttribute('data-validation-custom');
+
+                    // Проверка обязательных полей
                     if ( isRequire === 'true' ) {
                         checkStatus = checkInputForRequire( allFormInputs[i] );
-                        checkFormStatus = checkStatus;
+                        checkFormStatus = checkStatus;       // если поле пустое, то FALSE, иначе TRUE
                         setValidateStatusInDOM( checkStatus, allFormInputs[i], validators.requireField.errorMsg );
-                    }
-                }  // окончание проверки на ОБЯЗАТЕЛЬНОСТЬ полей
 
-                // проверка полей на соответсвие вводимых значений
-                if ( checkFormStatus ) {
-                    for (let i=0;i<allFormInputs.length;i++) {
-                        validator = allFormInputs[i].getAttribute('data-validation-templ');
-                        customValidator = allFormInputs[i].getAttribute('data-validation-custom');
+                        if ( checkStatus ) {
+                            if ( validator ) {
+                                checkStatus = checkInputTemplRegular( validator, allFormInputs[i] )
+                                checkFormStatus = checkStatus;
+                                setValidateStatusInDOM( checkStatus, allFormInputs[i], validators[validator].errorMsg );
+                            } else if ( customValidator ) {
+                                let customValidatorArray = customValidator.split(';');
+                                let validator = 'customValidator';
 
-                        if ( validator ) {
+                                // уберем кавычки из начала и конца строки
+                                for (let i=0;i<customValidatorArray.length;i++) {
+                                    customValidatorArray[i] = customValidatorArray[i].slice(1, -1);
+                                }
+
+                                // наполним объект кастомной строкой для валидации
+                                validators.customValidator.regExprPattern = customValidatorArray[0];
+                                validators.customValidator.regExprFlags = customValidatorArray[1];
+                                validators.customValidator.errorMsg = customValidatorArray[2];
+
+                                checkStatus = checkInputTemplRegular( validator, allFormInputs[i] )
+                                checkFormStatus = checkStatus;
+                                setValidateStatusInDOM( checkStatus, allFormInputs[i], validators[validator].errorMsg );
+
+                                // почистим объект кастомного валидатора
+                                validators.customValidator.regExprPattern = '';
+                                validators.customValidator.regExprFlags = '';
+                                validators.customValidator.errorMsg = '';
+                            }
+                        }
+                    } // Проверка обязательных полей
+                    // Проверка необязательных полей
+                    else {
+                        if ( validator && allFormInputs[i].value ) {
                             checkStatus = checkInputTemplRegular( validator, allFormInputs[i] )
                             checkFormStatus = checkStatus;
                             setValidateStatusInDOM( checkStatus, allFormInputs[i], validators[validator].errorMsg );
-                        } else if ( customValidator ) {
-                            let customValidatorArray = customValidator.split(';')
-                            let validator = 'customValidator'
+                        } else if ( customValidator && allFormInputs[i].value ) {
+                            let customValidatorArray = customValidator.split(';');
+                            let validator = 'customValidator';
 
-                            // уберрем кавычки из начала и конца строки
+                            // уберем кавычки из начала и конца строки
                             for (let i=0;i<customValidatorArray.length;i++) {
                                 customValidatorArray[i] = customValidatorArray[i].slice(1, -1);
                             }
@@ -166,9 +196,8 @@ module.exports = function handleFormValidate(e, log) {
                             validators.customValidator.regExprFlags = '';
                             validators.customValidator.errorMsg = '';
                         }
-
-                    }
-                } // окончание проверки полей на соответсвие вводимых значений
+                    } // Проверка необязательных полей
+                }  // окончание проверки всех полей
 
                 // Если в инпутах формы есть ошибки, то форму не отправлять
                 if ( !checkFormStatus ) {
@@ -176,19 +205,20 @@ module.exports = function handleFormValidate(e, log) {
                     e.preventDefault();
                 } else {
                     if(isPrintLogs) console.log('Ошибок нет. Форма отправлена!');
-                }
+                } //Если в инпутах формы есть ошибки, то форму не отправлять
 
-            } else {
+            } // Проверка на наличие инпуитов в форме
+            // Если инпутов нет, то завершить обработку и выйти
+            else {
                 e.preventDefault();
                 return;
-            }
-        } else {
-            // TODO здесь отдавать в BACK-END, убрать preventDefault
+            } // Если инпутов нет, то завершить обработку и выйти
+        } // Проверка формы на, то требует ли фолрма валидации с помощью mmJSValadation
+        // Если форма не требует валидации с помощью mmJSValadation, то просто отдать ее BACK-END
+        else {
             if(isPrintLogs) console.log('Форма поехала в бекэнд');
-
-        }
+        }         // Если форма не требует валидации с помощью mmJSValadation, то просто отдать ее BACK-END
     }
-
 
 }; // handleFormValidate
 // Обработчики событий =========================================================

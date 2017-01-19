@@ -1,6 +1,6 @@
 'use strict';
 
-import { handleFormValidate } from '../../src/mm-form-validation0.module';
+import { handleFormValidate } from 'test/src/mm-form-validation0.module';
 
 let validateInArticlesExample = document.getElementById('validateThisID');
 

@@ -42,7 +42,7 @@
             <div class="form-group">
                 <label class="control-label" for="">Phone2</label>
                 <input type="text" class="form-control" placeholder="Phone"
-                    data-validation-custom="customString"
+                    data-validation-custom="'^((8|\+7)[\- ]?)?(\(?\d{3}\)?[\- ]?)?[\d\- ]{7,10}$';'';'КАСТОМ!!! В поле нужно вводить телефон'"
                     data-validation-require="true"
                     >
                 <span class="help-block"></span>
@@ -62,8 +62,6 @@
                 data-validation-require="true"
                 data-validation-custom="'.+@.+\..+';'i';'КАСТОМ!!! В поле нужно вводить email, в формате: someaddress@domain.xxx'"
                 >
-                <!-- TODO проверить в винде и линуксе, различие между \\ и \ -->
-                <!-- data-validation-custom="'.+@.+\\..+';'i';'КАСТОМ!!! В поле нужно вводить email, в формате: someaddress@domain.xxx'"    -->
                 <span class="help-block"></span>
             </div>
             <div class="form-group has-error">

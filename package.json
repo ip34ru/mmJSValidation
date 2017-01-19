@@ -1,7 +1,7 @@
 {
   "name": "mm-js-validation",
-  "version": "1.0.1",
-  "description": "JavaScript validation fot bootstrap-forms",
+  "version": "1.1.0",
+  "description": "JavaScript validation for bootstrap-forms",
   "main": "index.js",
   "scripts": {
     "build": "babel src/mm-form-validation.module.js -o build/script.js --presets es2015",
