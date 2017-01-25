@@ -1,7 +1,7 @@
 ## JS-валидация input полей moremam.ru
 ====
 
-### v 1.1.0
+### v 1.2.0
 ====
 
 ## Описание скрипта
@@ -11,7 +11,11 @@
 
 #### Структура HTML форм
 
-Внимание! Внутри формы желательно использовать атрибут novalidate
+Внимание! Внутри формы нужно использовать атрибут novalidate
+
+Поддерживаются теги:
+ - input (полный функционал);
+ - textarea (поддерживается ```data-validation-require``` пожжержка многострочности для регулярок не гарантирована ) 
 
 ``` html
 <div class="container" id="validateThisID">
@@ -32,6 +36,17 @@
             >
             <span class="help-block"></span>
         </div>
+        <div class="form-group">
+            <label class="control-label" for="">TextArea</label>
+            <textarea
+                class="form-control"
+                rows="3"
+                data-validation-require="true"
+                >
+            </textarea>
+            <span class="help-block"></span>
+        </div>
+
     </form>
 
     <form id="form2" data-js-validation="false" novalidate class="" action="index.html" method="post">
